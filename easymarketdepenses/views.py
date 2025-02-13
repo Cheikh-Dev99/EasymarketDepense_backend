@@ -14,17 +14,11 @@ class DepenseViewSet(viewsets.ModelViewSet):
             print("Données reçues:", request.data)
             print("Files reçus:", request.FILES)
 
-            # Préparer les données
-            data = {
-                'title': request.data.get('title'),
-                'amount': request.data.get('amount'),
-                'category': request.data.get('category'),
-                'payment_method': request.data.get('payment_method'),
-            }
+            data = request.data.copy()
 
-            # Ajouter la pièce justificative si présente
-            if 'piece_justificative' in request.FILES:
-                data['piece_justificative'] = request.FILES['piece_justificative']
+            # Si une catégorie personnalisée est fournie
+            if 'custom_category' in data:
+                data['category'] = 'AUTRE'  # Force la catégorie à AUTRE
 
             print("Données formatées:", data)
 

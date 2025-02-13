@@ -36,4 +36,6 @@ class Depense(models.Model):
         ordering = ['-timestamp']
 
     def __str__(self):
-        return f"{self.title} - {self.amount} FCFA"
+        if self.category == 'AUTRE':
+            return f"{self.custom_category} - {self.amount} FCFA"
+        return f"{self.category} - {self.amount} FCFA"
