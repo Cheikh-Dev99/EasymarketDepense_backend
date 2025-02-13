@@ -3,6 +3,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from .models import Depense
 from .serializers import DepenseSerializer
+import os
 
 
 class DepenseViewSet(viewsets.ModelViewSet):
@@ -38,3 +39,18 @@ class DepenseViewSet(viewsets.ModelViewSet):
                 {"detail": str(e)},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        piece_justificative = request.data.get('piece_justificative')
+
+        if piece_justificative == 'delete':
+            if instance.piece_justificative:
+                if os.path.isfile(instance.piece_justificative.path):
+                    os.remove(instance.piece_justificative.path)
+                instance.piece_justificative = None
+                instance.save()
+            # Retirer le champ avant l'update
+            request.data.pop('piece_justificative', None)
+
+        return super().update(request, *args, **kwargs)
