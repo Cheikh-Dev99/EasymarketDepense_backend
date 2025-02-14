@@ -43,7 +43,7 @@ class DepenseViewSet(viewsets.ModelViewSet):
     def update(self, request, *args, **kwargs):
         try:
             instance = self.get_object()
-            
+
             # Convertir QueryDict en dictionnaire mutable
             mutable_data = request.data.copy()
 
@@ -64,11 +64,12 @@ class DepenseViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            serializer = self.get_serializer(instance, data=mutable_data, partial=True)
+            serializer = self.get_serializer(
+                instance, data=mutable_data, partial=True)
             if serializer.is_valid():
                 self.perform_update(serializer)
                 return Response(serializer.data)
-            
+
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
