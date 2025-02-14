@@ -42,37 +42,35 @@ class DepenseViewSet(viewsets.ModelViewSet):
 
     def update(self, request, *args, **kwargs):
         try:
-            print("Données reçues pour update:", request.data)
             instance = self.get_object()
+            
+            # Convertir QueryDict en dictionnaire mutable
+            mutable_data = request.data.copy()
 
             # Gestion de la pièce justificative
-            piece_justificative = request.data.get('piece_justificative')
-            if piece_justificative == 'delete':
-                if instance.piece_justificative:
-                    if os.path.isfile(instance.piece_justificative.path):
-                        os.remove(instance.piece_justificative.path)
+            if 'piece_justificative' in mutable_data:
+                if mutable_data['piece_justificative'] == 'delete':
+                    if instance.piece_justificative:
+                        instance.piece_justificative.delete()
+                    mutable_data.pop('piece_justificative')
                     instance.piece_justificative = None
-                request.data.pop('piece_justificative', None)
+                    instance.save()
 
-            # Gestion de la catégorie personnalisée
-            if request.data.get('category') == 'AUTRE':
-                if not request.data.get('custom_category'):
-                    return Response(
-                        {"detail": "Custom category is required for AUTRE"},
-                        status=status.HTTP_400_BAD_REQUEST
-                    )
+            # Validation de la catégorie
+            category = mutable_data.get('category')
+            if category not in ['SALAIRE', 'EAU', 'ELECTRICITE', 'LOYER', 'TRANSPORT', 'APPROVISIONNEMENT', 'AUTRE']:
+                return Response(
+                    {"category": ["Catégorie invalide"]},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            serializer = self.get_serializer(
-                instance, data=request.data, partial=True)
+            serializer = self.get_serializer(instance, data=mutable_data, partial=True)
             if serializer.is_valid():
                 self.perform_update(serializer)
                 return Response(serializer.data)
-            else:
-                print("Erreurs de validation:", serializer.errors)
-                return Response(
-                    serializer.errors,
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
         except Exception as e:
             print("Erreur lors de la mise à jour:", str(e))
             return Response(
