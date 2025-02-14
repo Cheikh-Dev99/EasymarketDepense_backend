@@ -31,7 +31,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'easymarketdepense-backend.onrender.com',
+    'localhost',
+    '127.0.0.1'
+]
 
 
 # Application definition
@@ -150,7 +154,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:19006",
     "http://localhost:19000",
-    # Ajoutez ici l'URL de votre application mobile une fois déployée
+    "exp://localhost:19000"
 ]
 CORS_ALLOW_METHODS = [
     'DELETE',
