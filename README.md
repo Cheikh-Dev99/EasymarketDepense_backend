@@ -30,7 +30,7 @@ POST /api/depenses/
 Content-Type: multipart/form-data
 
 {
-  "title": "Facture EDF",
+  "title": "Facture",
   "amount": "150000",
   "category": "ELECTRICITE",
   "payment_method": "WAVE",
@@ -42,7 +42,7 @@ Content-Type: multipart/form-data
 ```json
 {
   "id": 1,
-  "title": "Facture EDF",
+  "title": "Facture",
   "amount": "150000.00",
   "category": "ELECTRICITE",
   "payment_method": "WAVE",
