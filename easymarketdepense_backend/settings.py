@@ -32,9 +32,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    'easymarketdepense-backend.onrender.com',
+    # 'easymarketdepense-backend.onrender.com',
     'localhost',
-    '127.0.0.1'
+    '127.0.0.1',
+    '192.168.68.125',
+    '0.0.0.0'
 ]
 
 
@@ -88,23 +90,23 @@ WSGI_APPLICATION = 'easymarketdepense_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600
-    )
-}
-
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL'),
+#         conn_max_age=600
+#     )
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
+    }
+}
 
 
 # Password validation
@@ -152,10 +154,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Configuration CORS pour React Native
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19006",
     "http://localhost:19000",
-    "exp://localhost:19000"
+    "http://localhost:19006",
+    "exp://192.168.68.125:19000",
+    "exp://192.168.68.125:8081",
+    "http://192.168.68.125:19000",
+    "http://192.168.68.125:8081",
+    "http://192.168.68.125:8000"
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -175,6 +184,8 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 
 # Configuration pour les fichiers média
 MEDIA_URL = '/media/'

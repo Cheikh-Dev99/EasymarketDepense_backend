@@ -1,5 +1,6 @@
 from django.db import models
-
+from django.core.validators import MinValueValidator
+from decimal import Decimal
 
 class Depense(models.Model):
     TYPE_CHOICES = [
@@ -20,7 +21,14 @@ class Depense(models.Model):
     ]
 
     title = models.CharField(max_length=200)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.01'))],
+        error_messages={
+            'min_value': 'Le montant doit être supérieur à 0'
+        }
+    )
     category = models.CharField(max_length=50, choices=TYPE_CHOICES)
     custom_category = models.CharField(max_length=50, null=True, blank=True)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES)
