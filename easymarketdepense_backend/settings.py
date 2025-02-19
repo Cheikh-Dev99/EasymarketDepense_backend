@@ -32,7 +32,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
-    # 'easymarketdepense-backend.onrender.com',
+    'easymarketdepense-backend.onrender.com',
     'localhost',
     '127.0.0.1',
     '192.168.68.125',
